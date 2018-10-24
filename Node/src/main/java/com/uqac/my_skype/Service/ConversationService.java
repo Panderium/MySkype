@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class ConversationService {
@@ -30,6 +32,14 @@ public class ConversationService {
     }
 
     public boolean isEmpty() {
-        return conversations.isEmpty();
+        return conversations == null || conversations.isEmpty();
+    }
+
+    public Conversation getConversationByName(String name) {
+        return conversations.stream().filter(conversation -> conversation.getName() == name).collect(Collectors.toList()).get(0);
+    }
+
+    public void newMessage(String name, String message) {
+        this.getConversationByName(name).addMessage(message);
     }
 }

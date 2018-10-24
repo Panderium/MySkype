@@ -16,7 +16,7 @@ public class Conversation {
         this.messages = new ArrayList<>();
     }
 
-    public void add(String message) {
+    public void addMessage(String message) {
         this.messages.add(message);
     }
 
