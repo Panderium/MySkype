@@ -11,27 +11,31 @@ import java.util.List;
 @RequestMapping(value = "/api")
 public class ChatController {
 
-    private List<Conversation> conversations;
-
     @Autowired
     private ConversationService conversationService;
 
-    @RequestMapping(value = {"/", "/index"})
+    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public List<Conversation> index() {
-        if (conversationService.isEmpty()) {
-            conversations = conversationService.retrieveConversations();
-        }
-        return conversations;
+        return conversationService.listAll();
     }
 
-    @RequestMapping(value = "/conversation/{name}")
+    @RequestMapping(value = "/conversation/{name}", method = RequestMethod.GET)
     public Conversation getConversation(@PathVariable("name") String name) {
         return conversationService.getConversationByName(name);
     }
 
     @RequestMapping(value = "/conversation/{name}", method = RequestMethod.PUT)
-    public Conversation addMessage(@PathVariable("name") String name, @RequestParam("msg") String message) {
+    public void addMessage(@PathVariable("name") String name, @RequestBody String message) {
         conversationService.newMessage(name, message);
-        return conversationService.getConversationByName(name);
+    }
+
+    @RequestMapping(value = "/conversation", method = RequestMethod.POST)
+    public void newConversation(@RequestBody String name, @RequestBody String message) {
+        conversationService.newConversation(name, message);
+    }
+
+    @RequestMapping(value = "/conversation", method = RequestMethod.DELETE)
+    public void deleteConversation(@RequestBody String name) {
+        conversationService.deleteConversation(name);
     }
 }

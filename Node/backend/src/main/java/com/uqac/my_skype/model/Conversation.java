@@ -11,7 +11,7 @@ public class Conversation {
     private String name;
     private List<String> messages;
 
-    public Conversation(String name) {
+    public Conversation(String name, ArrayList<String> strings) {
         this.name = name;
         this.messages = new ArrayList<>();
     }
