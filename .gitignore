@@ -23,19 +23,19 @@ target
 # logback
 logback.out.xml
 
-backend/src/main/resources/public/
-backend/target
-frontend/dist/
-frontend/node/
-frontend/node_modules/
-frontend/npm-debug.log
-frontend/target
-frontend/test-output
-frontend/tests/e2e/reports
-frontend/tests/unit/coverage
-frontend/yarn-error.log
-frontend/yarn.lock
-security/target/
+Node/backend/src/main/resources/public/
+Node/backend/target
+Node/frontend/dist/
+Node/frontend/node/
+Node/frontend/node_modules/
+Node/frontend/npm-debug.log
+Node/frontend/target
+Node/frontend/test-output
+Node/frontend/tests/e2e/reports
+Node/frontend/tests/unit/coverage
+Node/frontend/yarn-error.log
+Node/frontend/yarn.lock
+Node/security/target/
 selenium-debug.log
 
 !.mvn/wrapper/maven-wrapper.jar
