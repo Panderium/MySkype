@@ -1,6 +1,6 @@
 package com.uqac.my_skype.controller;
 
-import com.uqac.my_skype.Service.ConversationService;
+import com.uqac.my_skype.service.ConversationService;
 import com.uqac.my_skype.model.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ public class ChatController {
     @Autowired
     private ConversationService conversationService;
 
-    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/conversation", method = RequestMethod.GET)
     public List<Conversation> index() {
         return conversationService.listAll();
     }
@@ -30,8 +30,8 @@ public class ChatController {
     }
 
     @RequestMapping(value = "/conversation", method = RequestMethod.POST)
-    public void newConversation(@RequestBody String name, @RequestBody String message) {
-        conversationService.newConversation(name, message);
+    public void newConversation(@RequestBody Conversation conversation) {
+        conversationService.newConversation(conversation);
     }
 
     @RequestMapping(value = "/conversation", method = RequestMethod.DELETE)
