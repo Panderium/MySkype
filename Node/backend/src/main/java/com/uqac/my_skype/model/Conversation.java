@@ -9,14 +9,14 @@ import java.util.List;
 public class Conversation {
 
     private String name;
-    private List<String> messages;
+    private List<Message> messages;
 
-    public Conversation(String name, ArrayList<String> strings) {
+    public Conversation(String name, ArrayList<Message> messages) {
         this.name = name;
         this.messages = new ArrayList<>();
     }
 
-    public void addMessage(String message) {
+    public void addMessage(Message message) {
         this.messages.add(message);
     }
 

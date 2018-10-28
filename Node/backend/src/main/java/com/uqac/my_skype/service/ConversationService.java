@@ -1,6 +1,7 @@
 package com.uqac.my_skype.service;
 
 import com.uqac.my_skype.model.Conversation;
+import com.uqac.my_skype.model.Message;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,10 @@ import java.util.List;
 public class ConversationService {
 
     private List<Conversation> conversations = new ArrayList<>(Arrays.asList(
-            new Conversation("Roger", new ArrayList<>(Arrays.asList("Holà ! como està"))),
-            new Conversation("Bernard", new ArrayList<>(Arrays.asList("Holà !"))),
-            new Conversation("Françine", new ArrayList<>(Arrays.asList("T ki wsh"))),
-            new Conversation("Madeleine la grosse moche", new ArrayList<>(Arrays.asList("Wai Wai !!!!")))
+            new Conversation("Roger", new ArrayList<>(Arrays.asList(new Message("Salut", true)))),
+            new Conversation("Bernard", new ArrayList<>(Arrays.asList(new Message("Salut", false)))),
+            new Conversation("Françine", new ArrayList<>(Arrays.asList(new Message("Oïe", true)))),
+            new Conversation("Madeleine la grosse moche", new ArrayList<>(Arrays.asList(new Message("Holà", false))))
     ));
 
     public ConversationService() {
@@ -43,10 +44,8 @@ public class ConversationService {
         return conversations.stream().filter(conversation -> conversation.getName().equals(name)).findFirst().get();
     }
 
-    public void newMessage(String name, String message) {
-        System.out.println(message);
+    public void newMessage(String name, Message message) {
         this.getConversationByName(name).addMessage(message);
-        this.saveConversations();
     }
 
     public List<Conversation> listAll() {

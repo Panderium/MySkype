@@ -1,5 +1,6 @@
 package com.uqac.my_skype.controller;
 
+import com.uqac.my_skype.model.Message;
 import com.uqac.my_skype.service.ConversationService;
 import com.uqac.my_skype.model.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ public class ChatController {
     }
 
     @RequestMapping(value = "/conversation/{name}", method = RequestMethod.PUT)
-    public void addMessage(@PathVariable("name") String name, @RequestBody String message) {
+    public void addMessage(@PathVariable("name") String name, @RequestBody Message message) {
+        System.out.println(name);
         conversationService.newMessage(name, message);
     }
 
