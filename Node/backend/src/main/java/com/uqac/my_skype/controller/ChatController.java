@@ -26,9 +26,8 @@ public class ChatController {
     }
 
     @RequestMapping(value = "/conversation/{name}", method = RequestMethod.PUT)
-    public void addMessage(@PathVariable("name") String name, @RequestBody Message message) {
-        System.out.println(name);
-        conversationService.newMessage(name, message);
+    public Conversation addMessage(@PathVariable("name") String name, @RequestBody Message message) {
+        return conversationService.newMessage(name, message);
     }
 
     @RequestMapping(value = "/conversation", method = RequestMethod.POST)

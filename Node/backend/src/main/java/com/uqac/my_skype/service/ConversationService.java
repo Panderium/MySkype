@@ -44,8 +44,10 @@ public class ConversationService {
         return conversations.stream().filter(conversation -> conversation.getName().equals(name)).findFirst().get();
     }
 
-    public void newMessage(String name, Message message) {
-        this.getConversationByName(name).addMessage(message);
+    public Conversation newMessage(String name, Message message) {
+        Conversation conversation = this.getConversationByName(name);
+        conversation.addMessage(message);
+        return conversation;
     }
 
     public List<Conversation> listAll() {

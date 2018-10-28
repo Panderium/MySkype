@@ -1,39 +1,18 @@
 <template>
     <div class="ConversationList">
 
-        <nav class="panel">
-            <p class="panel-heading">
-                Conversations
-            </p>
-            <div class="panel-block">
-                <p class="control has-icons-left">
-                    <input class="input is-small" type="text" placeholder="search">
-                    <span class="icon is-small is-left">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </span>
-                </p>
-            </div>
-            <div v-for="conv in response">
-                <a class="panel-block" @click="$emit('switch-conversation', conv.name)">
-                    <div class="media-left">
-                        <figure class="image is-64x64">
-                            <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
-                        </figure>
+        <ul class="collection" v-for="conv in response">
+                <li class="collection-item avatar">
+                    <img src="images/yuna.jpg" alt="" class="circle">
+                    <span class="title"><h6>{{ conv.name }}</h6></span>
+                    <p>
+                    <div v-if="typeof conv.messages[0] !== 'undefined'">
+                        {{ conv.messages[0].body }}
                     </div>
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>{{ conv.name }}</strong>
-                                <br>
-                            <div v-if="typeof conv.messages[0] !== 'undefined'">
-                                {{ conv.messages[0].body }}
-                            </div>
-                            </p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </nav>
+                    <a href="#" @click="$emit('switch-conversation', conv.name)" class="secondary-content"><i class="Large material-icons">send</i></a>
+                </li>
+        </ul>
+        <a @click="" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
     </div>
 </template>
 
@@ -58,6 +37,8 @@
                 })
         }
     }
+
+
 </script>
 
 <style scoped>

@@ -1,19 +1,11 @@
 <template>
     <div id="app">
-        <div class="tile is-ancestor">
-            <div class="tile is-vertical">
-                <div class="tile">
-                    <div class="tile is-parent">
-                        <article class="tile is-child is-3">
-                            <conversations-list v-on:switch-conversation="name = $event"/>
-                        </article>
-                        <div class="tile is-parent">
-                            <article class="tile is-child">
-                                <conversation :name=name />
-                            </article>
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col s3">
+                <conversations-list v-on:switch-conversation="name = $event"/>
+            </div>
+            <div class="col s5" style="overflow">
+                <conversation :name=name />
             </div>
         </div>
     </div>
@@ -21,7 +13,9 @@
 <script>
     import ConversationList from '@/components/ConversationsList'
     import Conversation from '@/components/Conversation'
-    import 'bulma/css/bulma.css'
+    import 'materialize-css'
+    import 'materialize-css/dist/css/materialize.min.css'
+    import 'material-icons'
 
     export default {
         name: "app",
