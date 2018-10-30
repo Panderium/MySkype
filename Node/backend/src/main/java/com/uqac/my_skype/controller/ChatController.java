@@ -1,11 +1,13 @@
 package com.uqac.my_skype.controller;
 
 import com.uqac.my_skype.model.Message;
+import com.uqac.my_skype.network.Connection;
 import com.uqac.my_skype.service.ConversationService;
 import com.uqac.my_skype.model.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -15,8 +17,17 @@ public class ChatController {
     @Autowired
     private ConversationService conversationService;
 
+    private Connection connection;
+
     @RequestMapping(value = "/conversation", method = RequestMethod.GET)
     public List<Conversation> index() {
+        try {
+            connection = new Connection("127.0.0.1",1111);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        new Thread(connection).start();
+        System.out.println("z:kjdufhi");
         return conversationService.listAll();
     }
 

@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class MyServer {
+public class Server {
 
     private int port = 1111;
     private String host = "127.0.0.1";
@@ -14,7 +14,7 @@ public class MyServer {
     private boolean isRunning = true;
 
 
-    public MyServer(int pPort){
+    public Server(int pPort){
         port = pPort;
         try {
             server = new ServerSocket(port, 100, InetAddress.getByName(host));

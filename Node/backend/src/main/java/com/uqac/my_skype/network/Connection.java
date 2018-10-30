@@ -3,20 +3,23 @@ package com.uqac.my_skype.network;
 import com.uqac.my_skype.model.Message;
 import com.uqac.my_skype.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class connection extends Thread{
+
+public class Connection implements  Runnable {
     private HashMap<String, Socket> peerSocket;
     private Socket cSocket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+
     @Autowired
     private ConversationService conversationService;
 
-    public connection(String ip, int port) throws IOException {
+    public Connection(String ip, int port) throws IOException {
         // Connexion sever + auth
         this.cSocket = new Socket(ip, port);
         this.in = new ObjectInputStream(this.cSocket.getInputStream());
@@ -35,20 +38,23 @@ public class connection extends Thread{
         return null;
     }
 
+    @Override
     public void run() {
-        while(true) {
-            try {
-                if (this.in.available() > 0) {
+        try {
+            while (true) {
+
+                    System.out.println("iciiiiii");
                     Message mes = (Message) in.readObject();
                     this.handleMessage(mes);
-                }
-            } catch (Exception e) {
+
+            }
+        }catch (Exception e) {
                 e.printStackTrace();
             }
-        }
     }
     private void handleMessage (Message mes){
-        conversationService.newMessage(mes.getFrom(), mes);
+        System.out.println("handle");
+        conversationService.newMessage("Roger", mes);
         }
 
 

@@ -1,5 +1,7 @@
 package network;
 
+import Service.Message;
+
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -24,7 +26,15 @@ public class GestionClient implements Runnable{
             try {
                 this.in = new ObjectInputStream(this.s.getInputStream());
                 this.out = new ObjectOutputStream(this.s.getOutputStream());
+                Message mes= new Message("Saluuuuttt",false);
 
+                out.writeObject(mes);
+                try {
+                    wait(10);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
 
 
                 if(closeConnexion){

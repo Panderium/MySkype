@@ -9,7 +9,8 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 public class MySkypeApplication {
 
-	public static void main(String[] args) {
+	public static void main (String[] args) throws Exception{
+
 		SpringApplication.run(MySkypeApplication.class, args);
 	}
 }
