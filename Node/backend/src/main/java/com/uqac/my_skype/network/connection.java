@@ -1,29 +1,30 @@
 package com.uqac.my_skype.network;
 
 import com.uqac.my_skype.model.Message;
+import com.uqac.my_skype.service.ConversationService;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class connection {
+public class connection extends Thread{
     private HashMap<String, Socket> peerSocket;
-    private Socket clientSocket;
-    private PrintWriter out;
-    private BufferedReader in;
+    private Socket cSocket;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
+    @Autowired
+    private ConversationService conversationService;
 
     public connection(String ip, int port) throws IOException {
         // Connexion sever + auth
-        this.clientSocket = new Socket(ip, port);
-        this.out = new PrintWriter(clientSocket.getOutputStream(), true);
-        this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        this.cSocket = new Socket(ip, port);
+        this.in = new ObjectInputStream(this.cSocket.getInputStream());
+        this.out = new ObjectOutputStream(this.cSocket.getOutputStream());
     }
 
-    public void sendMessage(Message message, String ip) {
-
+    public void sendMessage(Message message, String ip) throws IOException {
+        out.writeObject(message);
     }
 
     private void openNewConnection() {
@@ -33,6 +34,22 @@ public class connection {
     public String searchPearByName(String name) {
         return null;
     }
+
+    public void run() {
+        while(true) {
+            try {
+                if (this.in.available() > 0) {
+                    Message mes = (Message) in.readObject();
+                    this.handleMessage(mes);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void handleMessage (Message mes){
+        conversationService.newMessage(mes.getFrom(), mes);
+        }
 
 
 }
