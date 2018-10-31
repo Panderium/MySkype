@@ -32,6 +32,7 @@ public class Connection implements  Runnable {
 
     private void openNewConnection() {
 
+
     }
 
     public String searchPearByName(String name) {
