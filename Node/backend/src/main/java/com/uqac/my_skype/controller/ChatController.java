@@ -17,17 +17,9 @@ public class ChatController {
     @Autowired
     private ConversationService conversationService;
 
-    private Connection connection;
-
     @RequestMapping(value = "/conversation", method = RequestMethod.GET)
     public List<Conversation> index() {
-        try {
-            connection = new Connection("127.0.0.1",1111);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        new Thread(connection).start();
-        System.out.println("z:kjdufhi");
+
         return conversationService.listAll();
     }
 

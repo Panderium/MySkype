@@ -33,6 +33,7 @@ public class Server {
                 while(isRunning == true){
                     try {
                         Socket client = server.accept();
+                        System.out.println("New client");
                         Thread t = new Thread(new GestionClient(client));
                         t.start();
 

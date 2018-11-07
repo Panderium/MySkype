@@ -13,21 +13,21 @@ import java.util.HashMap;
 public class Connection implements  Runnable {
     private HashMap<String, Socket> peerSocket;
     private Socket cSocket;
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
+    private ObjectInputStream serveIn;
+    private ObjectOutputStream serveOut;
 
-    @Autowired
-    private ConversationService conversationService;
 
     public Connection(String ip, int port) throws IOException {
         // Connexion sever + auth
+        System.out.println("Connection instanciée");
+        new ServerP2P(2222).startServe();
         this.cSocket = new Socket(ip, port);
-        this.in = new ObjectInputStream(this.cSocket.getInputStream());
-        this.out = new ObjectOutputStream(this.cSocket.getOutputStream());
+
     }
 
-    public void sendMessage(Message message, String ip) throws IOException {
-        out.writeObject(message);
+    public void sendMessage(Message message) throws IOException {
+        serveOut.writeObject(message);
+        serveOut.flush();
     }
 
     private void openNewConnection() {
@@ -41,22 +41,19 @@ public class Connection implements  Runnable {
 
     @Override
     public void run() {
+
         try {
-            while (true) {
+            this.serveOut = new ObjectOutputStream(this.cSocket.getOutputStream());
+            this.serveIn = new ObjectInputStream(this.cSocket.getInputStream());
+            Message mes = new Message("ccccc",true);
+            System.out.println("send message");
 
-                    System.out.println("iciiiiii");
-                    Message mes = (Message) in.readObject();
-                    this.handleMessage(mes);
-
-            }
+            sendMessage(mes);
         }catch (Exception e) {
                 e.printStackTrace();
             }
     }
-    private void handleMessage (Message mes){
-        System.out.println("handle");
-        conversationService.newMessage("Roger", mes);
-        }
+
 
 
 }
