@@ -1,13 +1,11 @@
 package network;
 
-import Service.Message;
+import model.Message;
 
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
-import java.text.DateFormat;
-import java.util.Date;
+
 
 public class GestionClient implements Runnable{
 
@@ -21,20 +19,28 @@ public class GestionClient implements Runnable{
 
     public void run(){
         boolean closeConnexion = false;
+        try {
+            this.out = new ObjectOutputStream(this.s.getOutputStream());
+
+            this.in = new ObjectInputStream(this.s.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int i =0;
         while(!s.isClosed()){
 
             try {
-                this.in = new ObjectInputStream(this.s.getInputStream());
-                this.out = new ObjectOutputStream(this.s.getOutputStream());
+
+
                 Message mes= new Message("Saluuuuttt",false);
 
-                out.writeObject(mes);
-                try {
-                    wait(10);
+                while (i < 3) {
+                    out.writeObject(mes);
+                    out.flush();
+                    System.out.println("Envoie message");
+                    i++;
                 }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
+
 
 
                 if(closeConnexion){

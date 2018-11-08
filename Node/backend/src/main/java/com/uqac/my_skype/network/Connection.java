@@ -16,25 +16,19 @@ import java.util.HashMap;
 public class Connection implements Runnable {
     private HashMap<String, Socket> peerSocket;
     private Socket cSocket;
-    private InputStream inputStream;
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
-
-    @Autowired
-    private ConversationService conversationService;
+    private ObjectInputStream serveIn;
+    private ObjectOutputStream serveOut;
 
     public Connection(String ip, int port) throws IOException {
         // Connexion sever + auth
-        this.cSocket = new Socket(InetAddress.getByName(ip), port);
-        System.out.println("la");
-        this.inputStream = this.cSocket.getInputStream();
-        this.in = new ObjectInputStream(this.inputStream);
-        System.out.println("la");
-        this.out = new ObjectOutputStream(this.cSocket.getOutputStream());
+        System.out.println("Connection instanciée");
+        new ServerP2P(2222).startServe();
+        this.cSocket = new Socket(ip, port);
     }
 
-    public void sendMessage(Message message, String ip) throws IOException {
-        out.writeObject(message);
+    public void sendMessage(Message message) throws IOException {
+        serveOut.writeObject(message);
+        serveOut.flush();
     }
 
     private void openNewConnection() {
@@ -48,23 +42,17 @@ public class Connection implements Runnable {
 
     @Override
     public void run() {
-        try {
-            while (true) {
 
-                System.out.println("iciiiiii");
-                Message mes = (Message) in.readObject();
-                System.out.println(mes);
-                this.handleMessage(mes);
-            }
+        try {
+            this.serveOut = new ObjectOutputStream(this.cSocket.getOutputStream());
+            this.serveIn = new ObjectInputStream(this.cSocket.getInputStream());
+            Message mes = new Message("ccccc", true);
+            System.out.println("send message");
+
+            sendMessage(mes);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    private void handleMessage(Message mes) {
-        System.out.println("handle");
-        conversationService.newMessage("Roger", mes);
-    }
-
-
 }
+

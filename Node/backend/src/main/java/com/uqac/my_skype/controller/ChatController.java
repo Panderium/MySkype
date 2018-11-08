@@ -17,10 +17,9 @@ public class ChatController {
     @Autowired
     private ConversationService conversationService;
 
-    private Connection connection;
-
     @RequestMapping(value = "/conversation", method = RequestMethod.GET)
     public List<Conversation> index() {
+<<<<<<< HEAD
         try {
             System.out.println("ici");
             connection = new Connection("127.0.0.1",1111);
@@ -28,6 +27,9 @@ public class ChatController {
             e.printStackTrace();
         }
         new Thread(connection).start();
+=======
+
+>>>>>>> 9eb2f4f3b1c3850130cbe7df66120fc14f75d177
         return conversationService.listAll();
     }
 

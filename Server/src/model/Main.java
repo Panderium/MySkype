@@ -1,4 +1,4 @@
-package Service;
+package model;
 
 import network.Server;
 

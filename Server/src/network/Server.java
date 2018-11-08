@@ -1,8 +1,8 @@
 package network;
 
-import Service.Message;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,10 +33,9 @@ public class Server implements Runnable {
         while (this.isRunning) {
             try {
                 Socket client = server.accept();
-                this.in = new ObjectInputStream(client.getInputStream());
-                this.out = new ObjectOutputStream(client.getOutputStream());
-                Message mes= new Message("Saluuuuttt",false);
-                out.writeObject(mes);
+                System.out.println("New client");
+                Thread t = new Thread(new GestionClient(client));
+                t.start();
                 try {
                     Thread.sleep(400);
                 }
