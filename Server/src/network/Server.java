@@ -1,59 +1,57 @@
 package network;
 
-import java.io.IOException;
+import Service.Message;
+
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
-public class Server {
+public class Server implements Runnable {
 
-    private int port = 1111;
-    private String host = "127.0.0.1";
-    private ServerSocket server = null;
-    private boolean isRunning = true;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
+    private ServerSocket server;
+    private int port;
+    private boolean isRunning;
 
 
-    public Server(int pPort){
-        port = pPort;
+    public Server(int port, int nbConnection, String ip) {
+        this.port = port;
+        this.isRunning = true;
         try {
-            server = new ServerSocket(port, 100, InetAddress.getByName(host));
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+//            server = new ServerSocket(port, 100, InetAddress.getByName(host));
+            server = new ServerSocket(port, nbConnection, InetAddress.getByName(ip));
+            System.out.println(server.getInetAddress().getHostAddress());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    public void startServe(){
-
-        Thread t = new Thread(new Runnable(){
-            public void run(){
-                while(isRunning == true){
-                    try {
-                        Socket client = server.accept();
-                        Thread t = new Thread(new GestionClient(client));
-                        t.start();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
+    @Override
+    public void run() {
+        while (this.isRunning) {
+            try {
+                Socket client = server.accept();
+                this.in = new ObjectInputStream(client.getInputStream());
+                this.out = new ObjectOutputStream(client.getOutputStream());
+                Message mes= new Message("Saluuuuttt",false);
+                out.writeObject(mes);
                 try {
-                    server.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    server = null;
+                    Thread.sleep(400);
                 }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-        t.start();
+        }
     }
 
-    public void close(){
-        isRunning = false;
+    public void close() {
+        this.isRunning = false;
     }
 
 }
