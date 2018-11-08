@@ -2,57 +2,85 @@ package com.uqac.my_skype.network;
 
 import com.uqac.my_skype.model.Message;
 import com.uqac.my_skype.service.ConversationService;
+import com.uqac.my_skype.utils.StaticApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.util.HashMap;
-
 
 public class Connection implements Runnable {
-    private HashMap<String, Socket> peerSocket;
-    private Socket cSocket;
-    private ObjectInputStream serveIn;
-    private ObjectOutputStream serveOut;
 
-    public Connection(String ip, int port) throws IOException {
-        // Connexion sever + auth
-        System.out.println("Connection instanciée");
-        new ServerP2P(2222).startServe();
-        this.cSocket = new Socket(ip, port);
+    private Socket socket;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
+    private boolean isRunning;
+    private ConversationService conversationService;
+
+    public Connection(Socket socket) {
+        conversationService = StaticApplicationContext.getContext().getBean(ConversationService.class);
+        System.out.println("Creating connection...");
+        this.socket = socket;
+        System.out.println(socket.getPort());
+        System.out.println(socket.getInetAddress());
+        System.out.println(socket.getLocalAddress());
+        System.out.println(socket.getLocalPort());
+        this.isRunning = true;
+        try {
+            out = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("out");
+            out.flush();
+            in = new ObjectInputStream(socket.getInputStream());
+            System.out.println("in");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("New connection created");
     }
 
-    public void sendMessage(Message message) throws IOException {
-        serveOut.writeObject(message);
-        serveOut.flush();
+    public void sendMessage(Message message) {
+        System.out.println("Sending message...");
+        try {
+            out.writeObject(message);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Message sent");
     }
 
-    private void openNewConnection() {
-
-
-    }
-
-    public String searchPearByName(String name) {
-        return null;
-    }
 
     @Override
     public void run() {
-
-        try {
-            this.serveOut = new ObjectOutputStream(this.cSocket.getOutputStream());
-            this.serveIn = new ObjectInputStream(this.cSocket.getInputStream());
-            Message mes = new Message("ccccc", true);
-            System.out.println("send message");
-
-            sendMessage(mes);
-        } catch (Exception e) {
-            e.printStackTrace();
+        //handle received message
+        while (this.isRunning) {
+            try {
+                System.out.println("ready to listen");
+                Object o = in.readObject();
+                System.out.println("New message received");
+                System.out.println(o);
+                if (o instanceof Message) {
+                    ((Message) o).setSender(false);
+                    System.out.println(conversationService);
+                    conversationService.newMessage("Roger", (Message) o);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+//        try {
+//            this.serveOut = new ObjectOutputStream(this.cSocket.getOutputStream());
+//            this.serveIn = new ObjectInputStream(this.cSocket.getInputStream());
+//            Message mes = new Message("ccccc", true);
+//            System.out.println("send message");
+//
+//            sendMessage(mes);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }
 

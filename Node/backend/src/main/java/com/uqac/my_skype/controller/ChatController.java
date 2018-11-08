@@ -1,13 +1,15 @@
 package com.uqac.my_skype.controller;
 
+import com.uqac.my_skype.model.Conversation;
 import com.uqac.my_skype.model.Message;
 import com.uqac.my_skype.network.Connection;
+import com.uqac.my_skype.network.ServerP2P;
+import com.uqac.my_skype.service.ConnectionService;
 import com.uqac.my_skype.service.ConversationService;
-import com.uqac.my_skype.model.Conversation;
+import com.uqac.my_skype.utils.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,19 +19,24 @@ public class ChatController {
     @Autowired
     private ConversationService conversationService;
 
+    @Autowired
+    private ConnectionService connectionService;
+
+    @Autowired
+    private ConnectionFactory connectionFactory;
+
+    @Autowired
+    private ServerP2P serverP2P;
+
+    private boolean firstConnection = true;
+
     @RequestMapping(value = "/conversation", method = RequestMethod.GET)
     public List<Conversation> index() {
-<<<<<<< HEAD
-        try {
-            System.out.println("ici");
-            connection = new Connection("127.0.0.1",1111);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (this.firstConnection) {
+            new Thread(serverP2P).start();
+            connectionFactory.createServerConnection("127.0.0.1", 1111);
+            this.firstConnection = false;
         }
-        new Thread(connection).start();
-=======
-
->>>>>>> 9eb2f4f3b1c3850130cbe7df66120fc14f75d177
         return conversationService.listAll();
     }
 
@@ -40,6 +47,18 @@ public class ChatController {
 
     @RequestMapping(value = "/conversation/{name}", method = RequestMethod.PUT)
     public Conversation addMessage(@PathVariable("name") String name, @RequestBody Message message) {
+        if (!connectionService.exist(name)) {
+            System.out.println("Connection don't exist");
+            /**
+             * Si la connexion n'existe pas on requete le serveur pour avoir l'adresse ip de la personne qu'on essai de
+             * joindre et on créer la connection
+             * dans tous les cas on récupère la connexion correspondante via le service.
+             */
+
+            connectionFactory.createConnection(name, "127.0.0.1", 3333);
+        }
+        Connection connection = connectionService.getConnection(name);
+        connection.sendMessage(message);
         return conversationService.newMessage(name, message);
     }
 
