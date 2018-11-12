@@ -1,6 +1,7 @@
 package com.uqac.my_skype.controller;
 
 import com.uqac.my_skype.model.Conversation;
+import com.uqac.my_skype.model.IPport;
 import com.uqac.my_skype.model.Message;
 import com.uqac.my_skype.network.Connection;
 import com.uqac.my_skype.network.ServerP2P;
@@ -49,16 +50,25 @@ public class ChatController {
     public Conversation addMessage(@PathVariable("name") String name, @RequestBody Message message) {
         if (!connectionService.exist(name)) {
             System.out.println("Connection don't exist");
+            IPport sock = connectionService.getServerConnection().askIP(name);
+            if (sock !=null){
+                connectionFactory.createConnection(name, sock.getIP(), sock.getPort());
+
+            }
+            else{
+                System.out.println("Client Introuvable");
+                return conversationService.getConversationByName(name);
+            }
             /**
              * Si la connexion n'existe pas on requete le serveur pour avoir l'adresse ip de la personne qu'on essai de
              * joindre et on créer la connection
              * dans tous les cas on récupère la connexion correspondante via le service.
              */
 
-            connectionFactory.createConnection(name, "127.0.0.1", 3333);
         }
         Connection connection = connectionService.getConnection(name);
         connection.sendMessage(message);
+
         return conversationService.newMessage(name, message);
     }
 

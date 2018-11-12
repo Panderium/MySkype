@@ -1,5 +1,6 @@
 package com.uqac.my_skype.network;
 
+import com.uqac.my_skype.model.IPport;
 import com.uqac.my_skype.model.Message;
 import com.uqac.my_skype.service.ConversationService;
 import com.uqac.my_skype.utils.StaticApplicationContext;
@@ -49,6 +50,31 @@ public class Connection implements Runnable {
             e.printStackTrace();
         }
         System.out.println("Message sent");
+    }
+
+    public IPport askIP(String name) {
+        System.out.println("Asking server...");
+        try {
+            out.writeUTF(name);
+
+            out.writeUTF("Roger");
+            out.writeInt(3333);
+            out.flush();
+            String IP = in.readUTF();
+            Integer port = in.readInt();
+            if (IP == "null" || port == 0){
+                return null;
+            }else {
+                System.out.println("IP reçu: "+ IP +"-----"+ port);
+
+                return new IPport(IP,port);
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

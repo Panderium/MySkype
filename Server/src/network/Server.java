@@ -1,11 +1,14 @@
 package network;
 
+import model.IPport;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Server implements Runnable {
 
@@ -14,6 +17,7 @@ public class Server implements Runnable {
     private ServerSocket server;
     private int port;
     private boolean isRunning;
+    HashMap<String, IPport> BaseDNS;
 
 
     public Server(int port, int nbConnection, String ip) {

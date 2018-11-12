@@ -1,6 +1,7 @@
 package com.uqac.my_skype.service;
 
 import com.uqac.my_skype.model.Conversation;
+import com.uqac.my_skype.model.IPport;
 import com.uqac.my_skype.model.Message;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -19,6 +21,10 @@ public class ConversationService {
             new Conversation("Françine", new ArrayList<>(Arrays.asList(new Message("Oïe", true)))),
             new Conversation("Madeleine la grosse moche", new ArrayList<>(Arrays.asList(new Message("Holà", false))))
     ));
+    private HashMap<String, IPport> ip;
+
+
+
 
     public ConversationService() {
     }
@@ -57,6 +63,16 @@ public class ConversationService {
     public void newConversation(Conversation conversation) {
         conversations.add(conversation);
         this.saveConversations();
+    }
+
+    public void updateIP(String name, String addr, Integer port) {
+        ip.put(name ,new IPport(addr, port));
+
+        this.saveConversations();
+    }
+    public IPport getIP(String name) {
+        return ip.get(name);
+
     }
 
     public void deleteConversation(String name) {

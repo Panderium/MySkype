@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 @Service
 public class ConnectionService {
-    private Connection severConnection;
+    private Connection serverConnection;
     private HashMap<String, Connection> connections; // <pseudo/host, connection>
 
     public ConnectionService() {
@@ -24,7 +24,7 @@ public class ConnectionService {
     }
 
     public void addServer(Connection connection) {
-        this.severConnection = connection;
+        this.serverConnection = connection;
     }
 
     public boolean exist(String name) {
@@ -34,4 +34,7 @@ public class ConnectionService {
     public Connection getConnection(String name) {
         return connections.get(name);
     }
+
+    public Connection getServerConnection() { return serverConnection; }
+
 }
