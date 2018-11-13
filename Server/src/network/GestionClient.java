@@ -47,7 +47,6 @@ public class GestionClient implements Runnable {
             e.printStackTrace();
         }
 
-        int i = 0;
         while (!s.isClosed()) {
 
             try {
@@ -56,19 +55,38 @@ public class GestionClient implements Runnable {
                 String name = in.readUTF();
                 String clientip = s.getInetAddress().getHostAddress();
                 int clientport = in.readInt();
-                System.out.println("demande du client reçu: query  " + query + "---" + name + "   ip: " + clientip);
-                BaseDNS.put(name, new IPport(clientip, clientport));
-                IPport cc = BaseDNS.get(query);
-                if (cc != null) {
-                    out.writeUTF(cc.IP);
-                    out.writeInt(cc.port);
-                    System.out.println("réponse envoyé :" + cc.IP + "  port:" + cc.port);
+                if (clientport != 0) {
 
-                } else {
-                    out.writeUTF("null");
-                    out.writeInt(0);
+                    System.out.println("demande du client reçu: query  " + query + "---" + name + "   ip: " + clientip);
+                    BaseDNS.put(name, new IPport(clientip, clientport));
+                    IPport cc = BaseDNS.get(query);
+                    if (cc != null) {
+                        out.writeUTF(cc.IP);
+                        out.writeInt(cc.port);
+                        System.out.println("réponse envoyé :" + cc.IP + "  port:" + cc.port);
+
+                    } else {
+                        System.out.println("User Introuvable");
+
+                        out.writeUTF("null");
+                        out.writeInt(0);
+                    }
+                    out.flush();
+                }else{
+                    try {
+                        //bytes = in.readAllBytes();
+                        //String auth = new String(bytes, StandardCharsets.UTF_8);
+                        String auth = in.readUTF();
+                        System.out.println(auth);
+                        String[] credential = auth.split(",");
+                        System.out.println(credential);
+                        out.writeBoolean(true);
+                        out.flush();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-                out.flush();
 
 
             } catch (SocketException e) {

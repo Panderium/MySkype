@@ -25,6 +25,7 @@ public class ConversationService {
     private List<Conversation> conversations;
     private HashMap<String, IPport> ip;
     public int port;
+    public String user;
 
     public ConversationService() {
         conversations = new ArrayList<>();
