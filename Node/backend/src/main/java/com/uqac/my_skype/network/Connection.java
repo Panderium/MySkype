@@ -20,10 +20,11 @@ public class Connection implements Runnable {
     private ObjectOutputStream out;
     private boolean isRunning;
     private ConversationService conversationService;
-    private ConversationService connectionService;
+    private ConnectionService connectionService;
 
     public Connection(Socket socket) {
         conversationService = StaticApplicationContext.getContext().getBean(ConversationService.class);
+      connectionService = StaticApplicationContext.getContext().getBean(ConnectionService.class);
 
         System.out.println("Creating connection...");
         this.socket = socket;
@@ -48,6 +49,7 @@ public class Connection implements Runnable {
     public void sendMessage(Message message) {
         System.out.println("Sending message...");
         try {
+            message.setFrom(conversationService.user);
             out.writeObject(message);
             out.flush();
         } catch (IOException e) {
@@ -83,7 +85,7 @@ public class Connection implements Runnable {
         try {
             out.writeUTF(name);
 
-            out.writeUTF("Roger");
+            out.writeUTF(conversationService.user);
             out.writeInt(conversationService.port);
             out.flush();
             String IP = in.readUTF();
@@ -118,7 +120,7 @@ public class Connection implements Runnable {
                     ((Message) o).setSender(false);
                     System.out.println(conversationService);
                     String from = ((Message) o).getFrom();
-
+                    connectionService.editconnection(from);
                     conversationService.newMessage(from, (Message) o);
                 }
             } catch (Exception e) {

@@ -9,7 +9,7 @@ import java.net.ServerSocket;
 
 public class ServerP2P implements Runnable {
 
-    public static int PORT = 3333;
+    public static int PORT ;
 
     private ServerSocket server;
 
@@ -33,7 +33,7 @@ public class ServerP2P implements Runnable {
         while (true) {
             try {
                 System.out.println(connectionFactory);
-                connectionFactory.createConnection("Roger", server.accept());
+                connectionFactory.createConnection("pas de nom", server.accept());
 
                 //Socket client = server.accept();
                 System.out.println("New connection from client");
