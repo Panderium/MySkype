@@ -1,6 +1,7 @@
 package com.uqac.my_skype.service;
 
 import com.uqac.my_skype.network.Connection;
+import com.uqac.my_skype.utils.User;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -37,4 +38,7 @@ public class ConnectionService {
 
     public Connection getServerConnection() { return serverConnection; }
 
+    public boolean authServer(User user) {
+        return serverConnection.sendUser(user);
+    }
 }

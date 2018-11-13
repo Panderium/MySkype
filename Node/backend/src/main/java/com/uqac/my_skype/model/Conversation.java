@@ -11,9 +11,13 @@ public class Conversation {
     private String name;
     private List<Message> messages;
 
+    public Conversation() {
+        this.messages = new ArrayList<>();
+    }
+
     public Conversation(String name, ArrayList<Message> messages) {
         this.name = name;
-        this.messages = new ArrayList<>();
+        this.messages = messages;
     }
 
     public void addMessage(Message message) {

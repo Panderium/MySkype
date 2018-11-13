@@ -68,18 +68,6 @@
                     });
             }
         },
-        // updated() {
-        //     if (this.name !== null && this.message !== null) {
-        //         console.log("enorme");
-        //         axios.get("api/conversation/" + this.name + "/")
-        //             .then(response => {
-        //                 this.response = response.data
-        //             })
-        //             .catch(error => {
-        //                 this.errors.push(error)
-        //             })
-        //     }
-        // }
     }
 </script>
 

@@ -4,6 +4,7 @@ import com.uqac.my_skype.model.IPport;
 import com.uqac.my_skype.model.Message;
 import com.uqac.my_skype.service.ConversationService;
 import com.uqac.my_skype.utils.StaticApplicationContext;
+import com.uqac.my_skype.utils.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -50,6 +51,28 @@ public class Connection implements Runnable {
             e.printStackTrace();
         }
         System.out.println("Message sent");
+    }
+    public boolean sendUser(User user) {
+        boolean response = false;
+        System.out.println("Sending user...");
+        try {
+            String str = user.getName() + "," + user.getHash();
+            out.write(str.getBytes());
+            out.writeObject(user);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("User sent");
+        try {
+            System.out.println("réponse auth");
+            response = in.readBoolean();
+            System.out.println("réponse auth");
+            System.out.println(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
     }
 
     public IPport askIP(String name) {
@@ -108,5 +131,7 @@ public class Connection implements Runnable {
 //            e.printStackTrace();
 //        }
     }
+
+
 }
 

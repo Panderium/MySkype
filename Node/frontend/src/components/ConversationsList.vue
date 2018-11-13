@@ -12,7 +12,7 @@
                     <a href="#" @click="$emit('switch-conversation', conv.name)" class="secondary-content"><i class="Large material-icons">send</i></a>
                 </li>
         </ul>
-        <a @click="" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+        <a @click="$emit('new-conversation', true)" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
     </div>
 </template>
 
@@ -21,6 +21,9 @@
 
     export default {
         name: "ConversationList",
+        props: {
+            newConversation: Boolean
+        },
         data() {
             return {
                 response: [],
@@ -35,7 +38,20 @@
                 .catch(error => {
                     this.errors.push(error)
                 })
-        }
+        },
+        watch: {
+            newConversation() {
+                console.log("New conv");
+                axios.get(`api/conversation`)
+                    .then(response => {
+                        this.response = response.data
+                    })
+                    .catch(error => {
+                        this.errors.push(error)
+                    })
+            }
+
+        },
     }
 
 
