@@ -2,6 +2,7 @@ package com.uqac.my_skype.network;
 
 import com.uqac.my_skype.model.IPport;
 import com.uqac.my_skype.model.Message;
+import com.uqac.my_skype.service.ConnectionService;
 import com.uqac.my_skype.service.ConversationService;
 import com.uqac.my_skype.utils.StaticApplicationContext;
 import com.uqac.my_skype.utils.User;
@@ -19,9 +20,11 @@ public class Connection implements Runnable {
     private ObjectOutputStream out;
     private boolean isRunning;
     private ConversationService conversationService;
+    private ConversationService connectionService;
 
     public Connection(Socket socket) {
         conversationService = StaticApplicationContext.getContext().getBean(ConversationService.class);
+
         System.out.println("Creating connection...");
         this.socket = socket;
         System.out.println(socket.getPort());
@@ -65,10 +68,8 @@ public class Connection implements Runnable {
         }
         System.out.println("User sent");
         try {
-            System.out.println("réponse auth");
             response = in.readBoolean();
-            System.out.println("réponse auth");
-            System.out.println(response);
+            System.out.println("réponse auth:"+ response);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,12 +77,14 @@ public class Connection implements Runnable {
     }
 
     public IPport askIP(String name) {
+        conversationService = StaticApplicationContext.getContext().getBean(ConversationService.class);
+
         System.out.println("Asking server...");
         try {
             out.writeUTF(name);
 
             out.writeUTF("Roger");
-            out.writeInt(3333);
+            out.writeInt(conversationService.port);
             out.flush();
             String IP = in.readUTF();
             Integer port = in.readInt();
@@ -104,6 +107,7 @@ public class Connection implements Runnable {
     @Override
     public void run() {
         //handle received message
+
         while (this.isRunning) {
             try {
                 System.out.println("ready to listen");
@@ -113,7 +117,9 @@ public class Connection implements Runnable {
                 if (o instanceof Message) {
                     ((Message) o).setSender(false);
                     System.out.println(conversationService);
-                    conversationService.newMessage("Roger", (Message) o);
+                    String from = ((Message) o).getFrom();
+
+                    conversationService.newMessage(from, (Message) o);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

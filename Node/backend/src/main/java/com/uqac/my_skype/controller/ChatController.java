@@ -44,6 +44,7 @@ public class ChatController {
     public boolean askLogged() {
         if (this.firstConnection) {
             new Thread(serverP2P).start();
+            conversationService.port = serverP2P.PORT;
             connectionFactory.createServerConnection("127.0.0.1", 1111);
             this.firstConnection = false;
         }
