@@ -31,7 +31,7 @@ public class ConversationService {
         conversations = new ArrayList<>();
         Conversation conversation = new Conversation();
         conversation.setName("Phillipe");
-        Message message = new Message("FAIT PAS LE CON PHILLIP ! ", false);
+        Message message = new Message("Bonjour, je suis Phillipe ;) ", false);
         conversation.addMessage(message);
         conversations.add(conversation);
 
