@@ -34,8 +34,9 @@ public class GestionClient implements Runnable {
         }
         byte[] bytes;
         try {
-            bytes = in.readAllBytes();
-            String auth = new String(bytes, StandardCharsets.UTF_8);
+            //bytes = in.readAllBytes();
+            //String auth = new String(bytes, StandardCharsets.UTF_8);
+            String auth = in.readUTF();
             System.out.println(auth);
             String[] credential = auth.split(",");
             System.out.println(credential);

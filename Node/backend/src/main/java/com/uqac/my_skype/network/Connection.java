@@ -57,8 +57,8 @@ public class Connection implements Runnable {
         System.out.println("Sending user...");
         try {
             String str = user.getName() + "," + user.getHash();
-            out.write(str.getBytes());
-            out.writeObject(user);
+            out.writeUTF(str);
+            //out.writeObject(user);
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
