@@ -2,11 +2,10 @@ package network;
 
 import model.IPport;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 
@@ -17,6 +16,7 @@ public class GestionClient implements Runnable {
     private ObjectOutputStream out;
 
     private static HashMap<String, IPport> BaseDNS = new HashMap<String, IPport>();
+    private static HashMap<String, String> users =new HashMap<>();
 
     public GestionClient(Socket pSock) {
         s = pSock;
@@ -24,6 +24,26 @@ public class GestionClient implements Runnable {
     }
 
     public void run() {
+
+        if( ! new File("users").exists()){
+            users.put("test","9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08");
+            users.put("arnaud","9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08");
+            users.put("alexis","9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08");
+            try {
+                ObjectOutputStream ou = new ObjectOutputStream(new FileOutputStream("users.dat"));
+                ou.writeObject(users);
+                ou.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            ObjectInputStream lire = new ObjectInputStream(new FileInputStream("users.dat"));
+            users = (HashMap<String,String>) lire.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         try {
             this.out = new ObjectOutputStream(this.s.getOutputStream());
@@ -33,19 +53,7 @@ public class GestionClient implements Runnable {
             e.printStackTrace();
         }
         byte[] bytes;
-        try {
-            //bytes = in.readAllBytes();
-            //String auth = new String(bytes, StandardCharsets.UTF_8);
-            String auth = in.readUTF();
-            System.out.println(auth);
-            String[] credential = auth.split(",");
-            System.out.println(credential);
-            out.writeBoolean(true);
-            out.flush();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         while (!s.isClosed()) {
 
@@ -76,11 +84,17 @@ public class GestionClient implements Runnable {
                     try {
                         //bytes = in.readAllBytes();
                         //String auth = new String(bytes, StandardCharsets.UTF_8);
-                        String auth = in.readUTF();
-                        System.out.println(auth);
-                        String[] credential = auth.split(",");
-                        System.out.println(credential);
-                        out.writeBoolean(true);
+                        System.out.println("user:"+name+"   hash:"+query);
+                        if (users.containsKey(name)){
+                            if(users.get(name).equals(query))
+                                out.writeBoolean(true);
+                            else
+                                out.writeBoolean(false);
+
+                        }
+                        else
+                            out.writeBoolean(false);
+
                         out.flush();
 
                     } catch (Exception e) {
