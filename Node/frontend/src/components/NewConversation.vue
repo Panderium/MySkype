@@ -52,6 +52,7 @@
                 }
                 if (this.errors === null) {
                     this.$emit('new-conversation', false);
+                    this.$emit("switch-conversation", this.name)
                 }
             }
         },

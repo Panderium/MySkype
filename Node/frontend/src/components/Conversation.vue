@@ -2,7 +2,7 @@
     <div class="conversation">
         <div class="card large" style="overflow: auto">
 
-            <h4 class="header center">{{ this.name }}</h4>
+            <h4 class="header center">{{ this.username }}</h4>
             <div class="card-content">
                 <div v-if="response !== null">
                     <div v-for="message in this.response.messages">
@@ -30,7 +30,7 @@
     export default {
         name: "Conversation",
         props: {
-            name: String
+            username: String
         },
         data() {
             return {
@@ -40,8 +40,9 @@
             }
         },
         watch: {
-            name() {
-                axios.get("api/conversation/" + this.name + "/")
+            username(newVal, oldVal) {
+                axios.get("api/conversation/" + this.username + "/")
+                    console.log("Old val ", oldVal, "new val ", newVal)
                     .then(response => {
                         this.response = response.data
                     })
@@ -59,7 +60,7 @@
                     "sender": true
                 };
                 this.message = null;
-                axios.put("api/conversation/" + this.name + "/", content)
+                axios.put("api/conversation/" + this.username + "/", content)
                     .then(response => {
                         this.response = response.data
                     })
@@ -68,6 +69,15 @@
                     });
             }
         },
+        updated() {
+            axios.get("api/conversation/" + this.username + "/")
+                .then(response => {
+                    this.response = response.data
+                })
+                .catch(error => {
+                    this.errors.push(error)
+                })
+        }
     }
 </script>
 

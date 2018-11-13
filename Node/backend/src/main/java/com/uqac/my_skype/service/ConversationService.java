@@ -42,18 +42,18 @@ public class ConversationService {
         return null;
     }
 
-    public void saveConversations() {
-        JSONArray root = new JSONArray();
-
-        for (Conversation conv : this.conversations) {
-            JSONObject conversation = new JSONObject();
-            conversation.put("name", conv.getName());
-            JSONArray messagesArray = new JSONArray(conv.getMessages());
-            conversation.put("messages", messagesArray);
-            root.put(conversation);
-        }
-        System.out.println(root);
-    }
+//    public void saveConversations() {
+//        JSONArray root = new JSONArray();
+//
+//        for (Conversation conv : this.conversations) {
+//            JSONObject conversation = new JSONObject();
+//            conversation.put("name", conv.getName());
+//            JSONArray messagesArray = new JSONArray(conv.getMessages());
+//            conversation.put("messages", messagesArray);
+//            root.put(conversation);
+//        }
+//        System.out.println(root);
+//    }
 
     public Conversation getConversationByName(String name) {
         if (conversations.stream().anyMatch(conversation -> conversation.getName().equals(name)))
@@ -79,13 +79,13 @@ public class ConversationService {
 
     public void newConversation(Conversation conversation) {
         conversations.add(conversation);
-        this.saveConversations();
+//        this.saveConversations();
     }
 
     public void updateIP(String name, String addr, Integer port) {
         ip.put(name, new IPport(addr, port));
 
-        this.saveConversations();
+//        this.saveConversations();
     }
 
     public IPport getIP(String name) {

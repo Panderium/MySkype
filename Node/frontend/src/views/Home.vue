@@ -3,15 +3,15 @@
         <div v-if="logged">
             <div class="row">
                 <div class="col s3">
-                    <conversations-list v-on:switch-conversation="name = $event"
+                    <conversations-list v-on:switch-conversation="username = $event"
                                         v-on:new-conversation="addConversation = $event"
                                         :newConversation=addConversation />
                 </div>
                 <div v-if="! addConversation" class="col s5">
-                    <conversation :name=name />
+                    <conversation :username=username />
                 </div>
                 <div v-else class="col s5">
-                    <new-conversation v-on:new-conversation="addConversation = $event"/>
+                    <new-conversation v-on:new-conversation="addConversation = $event" v-on:switch-conversation="username = $event" />
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
         },
         data() {
             return {
-                name: null,
+                username: null,
                 addConversation: false,
                 logged: false,
             }

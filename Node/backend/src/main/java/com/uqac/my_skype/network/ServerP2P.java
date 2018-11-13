@@ -33,7 +33,7 @@ public class ServerP2P implements Runnable {
         while (true) {
             try {
                 System.out.println(connectionFactory);
-                connectionFactory.createConnection("pas de nom", server.accept());
+                connectionFactory.createConnection("none", server.accept());
 
                 //Socket client = server.accept();
                 System.out.println("New connection from client");

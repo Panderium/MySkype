@@ -2,6 +2,7 @@ package com.uqac.my_skype.network;
 
 import com.uqac.my_skype.model.IPport;
 import com.uqac.my_skype.model.Message;
+import com.uqac.my_skype.service.ConnectionService;
 import com.uqac.my_skype.service.ConversationService;
 import com.uqac.my_skype.utils.StaticApplicationContext;
 import com.uqac.my_skype.utils.User;
@@ -22,7 +23,7 @@ public class Connection implements Runnable {
 
     public Connection(Socket socket) {
         conversationService = StaticApplicationContext.getContext().getBean(ConversationService.class);
-      connectionService = StaticApplicationContext.getContext().getBean(ConnectionService.class);
+        connectionService = StaticApplicationContext.getContext().getBean(ConnectionService.class);
 
         System.out.println("Creating connection...");
         this.socket = socket;
@@ -55,6 +56,7 @@ public class Connection implements Runnable {
         }
         System.out.println("Message sent");
     }
+
     public boolean sendUser(User user) {
         boolean response = false;
         System.out.println("Sending user...");
@@ -69,7 +71,7 @@ public class Connection implements Runnable {
         System.out.println("User sent");
         try {
             response = in.readBoolean();
-            System.out.println("réponse auth:"+ response);
+            System.out.println("réponse auth:" + response);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,7 +79,6 @@ public class Connection implements Runnable {
     }
 
     public IPport askIP(String name) {
-        conversationService = StaticApplicationContext.getContext().getBean(ConversationService.class);
 
         System.out.println("Asking server...");
         try {
@@ -88,12 +89,12 @@ public class Connection implements Runnable {
             out.flush();
             String IP = in.readUTF();
             Integer port = in.readInt();
-            if (IP == "null" || port == 0){
+            if (IP == "null" || port == 0) {
                 return null;
-            }else {
-                System.out.println("IP reçu: "+ IP +"-----"+ port);
+            } else {
+                System.out.println("IP reçu: " + IP + "-----" + port);
 
-                return new IPport(IP,port);
+                return new IPport(IP, port);
 
             }
 
@@ -118,7 +119,7 @@ public class Connection implements Runnable {
                     ((Message) o).setSender(false);
                     System.out.println(conversationService);
                     String from = ((Message) o).getFrom();
-                    connectionService.editconnection(from);
+                    connectionService.editConnection(from);
                     conversationService.newMessage(from, (Message) o);
                 }
             } catch (Exception e) {

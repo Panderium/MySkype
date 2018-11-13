@@ -41,4 +41,15 @@ public class ConnectionService {
     public boolean authServer(User user) {
         return serverConnection.sendUser(user);
     }
+
+    public void editConnection(String from) {
+        Connection connection;
+
+        if (connections.keySet().stream().anyMatch(s -> s.equals("none"))) {
+            connection = connections.get("none");
+            connections.remove("none");
+            connections.put(from, connection);
+
+        }
+    }
 }
