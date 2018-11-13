@@ -2,11 +2,9 @@ package com.uqac.my_skype.network;
 
 import com.uqac.my_skype.model.IPport;
 import com.uqac.my_skype.model.Message;
-import com.uqac.my_skype.service.ConnectionService;
 import com.uqac.my_skype.service.ConversationService;
 import com.uqac.my_skype.utils.StaticApplicationContext;
 import com.uqac.my_skype.utils.User;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
