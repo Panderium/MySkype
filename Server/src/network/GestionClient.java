@@ -4,8 +4,6 @@ import model.IPport;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 
@@ -52,9 +50,6 @@ public class GestionClient implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        byte[] bytes;
-
-
         while (!s.isClosed()) {
 
             try {
@@ -82,15 +77,12 @@ public class GestionClient implements Runnable {
                     out.flush();
                 }else{
                     try {
-                        //bytes = in.readAllBytes();
-                        //String auth = new String(bytes, StandardCharsets.UTF_8);
                         System.out.println("user:"+name+"   hash:"+query);
                         if (users.containsKey(name)){
                             if(users.get(name).equals(query))
                                 out.writeBoolean(true);
                             else
                                 out.writeBoolean(false);
-
                         }
                         else
                             out.writeBoolean(false);
@@ -103,12 +95,8 @@ public class GestionClient implements Runnable {
                 }
 
 
-            } catch (SocketException e) {
-                e.printStackTrace();
-
-                break;
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                System.out.println("Client déconnecté");
 
                 return;
             }

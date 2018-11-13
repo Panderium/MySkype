@@ -18,6 +18,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api")
 public class ChatController {
+    //private String IP = "192.168.43.26";
+    private String IP = "127.0.0.1";
+
+
 
     @Autowired
     private ConversationService conversationService;
@@ -52,7 +56,7 @@ public class ChatController {
         if (this.firstConnection) {
             new Thread(serverP2P).start();
             conversationService.port = serverP2P.PORT;
-            connectionFactory.createServerConnection("192.168.43.26", 1111);
+            connectionFactory.createServerConnection(IP, 1111);
             this.firstConnection = false;
         }
         return this.logged;
@@ -117,6 +121,9 @@ public class ChatController {
                 IPport sock = connectionService.getServerConnection().askIP(conversation.getName());
                 if (sock != null) {
                     connectionFactory.createConnection(conversation.getName(), sock.getIP(), sock.getPort());
+                    Connection connection = connectionService.getConnection(conversation.getName());
+                    connection.sendMessage(conversation.getMessages().get(0));
+                    conversationService.newConversation(conversation);
                 } else {
                     System.out.println("Client Introuvable");
                 }
@@ -126,11 +133,13 @@ public class ChatController {
                  * dans tous les cas on récupère la connexion correspondante via le service.
                  */
 
+            } else {
+                Connection connection = connectionService.getConnection(conversation.getName());
+                connection.sendMessage(conversation.getMessages().get(0));
+                conversationService.newConversation(conversation);
             }
-            Connection connection = connectionService.getConnection(conversation.getName());
-            connection.sendMessage(conversation.getMessages().get(0));
-            conversationService.newConversation(conversation);
-        }
+            }
+
     }
 
     @RequestMapping(value = "/conversation", method = RequestMethod.DELETE)
