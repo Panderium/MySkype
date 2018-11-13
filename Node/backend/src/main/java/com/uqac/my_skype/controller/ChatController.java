@@ -34,7 +34,7 @@ public class ChatController {
     private boolean firstConnection = true;
     private boolean logged = false;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.PUT)
     public void login(@RequestBody User user) {
         System.out.println("Auth");
         this.logged = connectionService.authServer(user);
