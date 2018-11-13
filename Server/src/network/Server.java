@@ -25,7 +25,7 @@ public class Server implements Runnable {
         this.isRunning = true;
         try {
 //            server = new ServerSocket(port, 100, InetAddress.getByName(host));
-            server = new ServerSocket(port, nbConnection, InetAddress.getByName(ip));
+            server = new ServerSocket(port);
             System.out.println(server.getInetAddress().getHostAddress());
         } catch (IOException e) {
             e.printStackTrace();

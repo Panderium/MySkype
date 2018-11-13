@@ -67,6 +67,7 @@ public class ConversationService {
             conversation = new Conversation();
             conversation.addMessage(message);
             conversation.setName(name);
+            conversations.add(conversation);
         } else
             conversation.addMessage(message);
 
