@@ -67,7 +67,7 @@
                     "name": this.username,
                     "hash": this.password
                 };
-                axios.post("api/login", content)
+                axios.put("api/login", content)
                     .catch(error => {
                         this.errors = error
                         console.log(this.errors)
