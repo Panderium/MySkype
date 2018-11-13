@@ -38,6 +38,7 @@ public class ChatController {
     public void login(@RequestBody User user) {
         System.out.println("Auth");
         this.logged = connectionService.authServer(user);
+
         if (this.logged){
             conversationService.user = user.getName();
         }

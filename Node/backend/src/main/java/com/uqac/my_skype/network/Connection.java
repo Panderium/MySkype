@@ -10,7 +10,10 @@ import com.uqac.my_skype.utils.User;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Connection implements Runnable {
 
@@ -62,10 +65,21 @@ public class Connection implements Runnable {
         System.out.println("Sending user...");
         try {
             String str = user.getName() + "," + user.getHash();
-            out.writeUTF(str);
-            //out.writeObject(user);
+
+            byte[] mdp =user.getHash().getBytes("UTF-8");
+
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.reset();
+            messageDigest.update(mdp);
+
+            byte[] hash = messageDigest.digest();
+            BigInteger bigInt = new BigInteger(1,hash);
+            String hashtext = bigInt.toString(16);
+            out.writeUTF(hashtext);
+            out.writeUTF(user.getName());
+            out.writeInt(0);
             out.flush();
-        } catch (IOException e) {
+        } catch (IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         System.out.println("User sent");
