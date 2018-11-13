@@ -9,19 +9,20 @@ import java.net.ServerSocket;
 
 public class ServerP2P implements Runnable {
 
-    private final int PORT = 3333;
-    private final String HOST = "127.0.0.1";
-    private final int NB_CONNECION = 200;
+    public static int PORT = 3333;
 
     private ServerSocket server;
 
     @Autowired
     private ConnectionFactory connectionFactory;
 
+
     public ServerP2P() {
         try {
-            server = new ServerSocket(PORT, NB_CONNECION, InetAddress.getByName(HOST));
-        } catch (IOException e) {
+            server = new ServerSocket(0);
+            PORT = server.getLocalPort();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
