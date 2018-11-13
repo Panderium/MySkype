@@ -133,8 +133,11 @@ public class Connection implements Runnable {
                     ((Message) o).setSender(false);
                     System.out.println(conversationService);
                     String from = ((Message) o).getFrom();
+
                     connectionService.editConnection(from);
                     conversationService.newMessage(from, (Message) o);
+                    System.out.println("ajout message quand reçu, user : "+from);
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();

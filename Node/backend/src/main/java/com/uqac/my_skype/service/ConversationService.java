@@ -64,9 +64,12 @@ public class ConversationService {
     public Conversation newMessage(String name, Message message) {
         Conversation conversation = this.getConversationByName(name);
         if (conversation == null) {
+            System.out.println("On créé un conversation");
+
             conversation = new Conversation();
             conversation.addMessage(message);
             conversation.setName(name);
+            conversations.add(conversation);
         } else
             conversation.addMessage(message);
 
