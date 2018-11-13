@@ -40,7 +40,10 @@ public class ChatController {
         this.logged = connectionService.authServer(user);
 
         if (this.logged){
+
             conversationService.user = user.getName();
+            connectionService.getServerConnection().askIP("testdezkjzi");
+
         }
     }
 
@@ -49,7 +52,7 @@ public class ChatController {
         if (this.firstConnection) {
             new Thread(serverP2P).start();
             conversationService.port = serverP2P.PORT;
-            connectionFactory.createServerConnection("127.0.0.1", 1111);
+            connectionFactory.createServerConnection("192.168.43.26", 1111);
             this.firstConnection = false;
         }
         return this.logged;
